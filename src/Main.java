@@ -1,12 +1,68 @@
 import DataStructure.ListNode;
 import org.junit.Test;
-import org.junit.runners.Parameterized;
 
-import java.util.Stack;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
+    }
+
+    @Test
+    public void missionAlocationTest() {
+        int[][] matrix = {{9, 2, 7, 8},
+                {6, 4, 3, 7},
+                {5, 8, 1, 8},
+                {7, 6, 9, 4}};
+//    for (int[] ints : matrix) {
+//        for (int anInt : ints) {
+//            System.out.print(anInt+" ");
+//        }
+//        System.out.println();
+//    }
+
+
+    }
+
+    public void missionAlocation(int[][] matrix, int h) {
+        int[] mission = new int[matrix[0].length];
+        for (int i = 0; i < mission.length; i++) {
+            mission[i] = 0;
+        }
+        if (h >= matrix[0].length) {
+
+        }
+
+    }
+
+
+    public class Bag {
+        int maxw;
+        int maxp;
+        int[] choised;
+
+        public Bag(int maxw, int maxp, int[] choised) {
+            this.maxw = maxw;
+            this.maxp = maxp;
+            this.choised = choised;
+        }
+
+        public Bag() {
+        }
+
+        public Bag(int maxw, int maxp) {
+            this.maxw = maxw;
+            this.maxp = maxp;
+        }
+
+        @Override
+        public String toString() {
+            return "Bag{" +
+                    "maxw=" + maxw +
+                    ", maxp=" + maxp +
+                    ", choised=" + Arrays.toString(choised) +
+                    '}';
+        }
     }
 
     @Test
@@ -23,54 +79,32 @@ public class Main {
         for (int i = 0; i < chiose.length; i++) {
             chiose[i] = 0;
         }
-        B01F(chiose, weight, prices, max, 0, 0);
-        B01F(chiose, weight, prices, max, 0, 1);
+        Bag best = new Bag(0, 0);
+        B01F(best, chiose, weight, prices, max, 0, 0);
+        B01F(best, chiose, weight, prices, max, 0, 1);
+        System.out.println(best);
     }
 
-    public int[] Bag01Force(int[] weight, int[] prices, int max) {
-        int[] chiose = new int[weight.length];
-        for (int i = 0; i < chiose.length; i++) {
-            chiose[i] = 0;
-        }
-        int sumw = 0;
-        int sunv = 0;
-        int maxw = 0;
-        int maxv = 0;
-//        个数
-        for (int i = 1; i <= weight.length; i++) {
-            for (int i1 = 0; i1 < chiose.length; i1++) {
-                chiose[i1] = 0;
-            }
-//            选i个
-            for (int j = 1; j <= i; j++) {
-//                选一个
-                for (int k = 0; k < weight.length && chiose[k] == 0; k++) {
-
-                }
-            }
-        }
-
-        for (int i = 0; i < weight.length; i++) {
-
-        }
-        return chiose;
-    }
-    public void B01F(int[] choise, int[] weight, int[] prices, int max, int h, int c){
-        if (h >= choise.length){
+    public void B01F(Bag best, int[] choise, int[] weight, int[] prices, int max, int h, int c) {
+        if (h >= choise.length) {
             int sumw = 0;
             int sump = 0;
             for (int i = 0; i < choise.length; i++) {
-                System.out.print(" "+choise[i]);
-                if (choise[i] == 1){
-                    sumw+=weight[i];
-                    sump+=prices[i];
+                System.out.print(" " + choise[i]);
+                if (choise[i] == 1) {
+                    sumw += weight[i];
+                    sump += prices[i];
                 }
             }
-            System.out.print("  重量："+sumw+"  价值："+sump);
-            if (sumw>max){
+            System.out.print("  重量：" + sumw + "  价值：" + sump);
+            if (sumw > max) {
                 System.out.print("  超重");
-            }
-            else {
+            } else {
+                if (best.maxp < sump) {
+                    best.maxp = sump;
+                    best.maxw = sumw;
+                    best.choised = choise.clone();
+                }
                 System.out.print("  合适");
             }
             System.out.println();
@@ -79,10 +113,10 @@ public class Main {
 //        System.out.print("层数：");
 //        System.out.print(c+" ");
         choise[h] = c;
-        B01F(choise, weight, prices, max, h+1, 0);
+        B01F(best, choise, weight, prices, max, h + 1, 0);
 //        B01F(choise, weight, prices, max, h+1, 1);
-        if (h+1 != choise.length){
-            B01F(choise, weight, prices, max, h+1, 1);
+        if (h + 1 != choise.length) {
+            B01F(best, choise, weight, prices, max, h + 1, 1);
         }
     }
 
