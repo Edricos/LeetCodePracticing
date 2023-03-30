@@ -2,11 +2,83 @@ import DataStructure.ListNode;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Scanner;
+
+import static java.lang.Math.max;
+import static java.lang.Math.sqrt;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
     }
+
+
+    @Test
+    public void nQueen() {
+        FnQueen nq = new FnQueen();
+        nq.start();
+    }
+
+
+    // 判断素数
+    @Test
+    public void FifS() {
+        Scanner input = new Scanner(System.in);
+//        int num = input.nextInt();
+        int num = 16;
+        int k = (int) sqrt((double) num);
+        int i;
+        for (i = 2; i <= k; i++)
+            if (num % i == 0)
+                break;
+        // 如果完成所有循环，那么m为素数
+        // 注意最后一次循环，会执行i++，此时 i=k+1，所以有i>k
+        if (i > k)
+            System.out.println(num + " 是素数");
+        else
+            System.out.println(num + " 不是素数");
+    }
+
+
+    //最大公约数
+    @Test
+    public void measure() {
+        int x = 35;
+        int y = 28;
+        int z = y;
+        while (x % y != 0) {
+            z = x % y;
+            x = y;
+            y = z;
+        }
+        System.out.println(z);
+    }
+
+    //动态规划01背包
+    @Test
+    public void Fbag01() {
+        int[] w = {0, 2, 3, 4, 5};            //商品的体积2、3、4、5
+        int[] v = {0, 3, 4, 5, 6};            //商品的价值3、4、5、6
+        int bagV = 8;                            //背包大小
+        int[][] dp = new int[5][9];
+//        Arrays.fill(dp, 0);//动态规划表
+
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= bagV; j++) {
+                if (j < w[i])
+                    dp[i][j] = dp[i - 1][j];
+                else
+                    dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w[i]] + v[i]);
+            }
+        }
+        for (int[] ints : dp) {
+            for (int anInt : ints) {
+                System.out.print(anInt + " ");
+            }
+            System.out.println();
+        }
+    }
+
 
     @Test
     public void missionAlocationTest() {
