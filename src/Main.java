@@ -4,8 +4,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import static java.lang.Math.max;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,6 +12,120 @@ public class Main {
     }
 
 
+//    贪心法实现两个数组田忌赛马
+//    const int N = 1010;
+//int n;
+//int a[N], b[N];
+//
+//int main() {
+//    while (cin >> n, n) {
+//        for (int i = 0; i < n; i++) cin >> a[i];
+//        sort(a, a + n);
+//        for (int i = 0; i < n; i++) cin >> b[i];
+//        sort(b, b + n);
+//
+//        int res = 0;
+//        for (int la = 0, ra = n - 1, lb = 0, rb = n - 1; la <= ra;) {
+//        	// 国王最快马比田忌最快马快，则田忌派出最慢马；
+//        	// 国王最快马比田忌最快马慢，则田忌派出最快马；
+//            if (b[rb] > a[ra]) {
+//                res -= 200;
+//                la++, rb--;
+//            } else if (b[rb] < a[ra]) {
+//                res += 200;
+//                ra--, rb--;
+//            } else {
+//            	// 国王最快马和田忌最快马一样快，如果国王最慢马比田忌最慢马慢，
+//            	// 则田忌派出最慢马与国王最慢马比；否则派最慢马与国王最快马比
+//                if (b[lb] < a[la]) {
+//                    res += 200;
+//                    la++, lb++;
+//                } else {
+//                    if (a[la] < b[rb]) res -= 200;
+//                    la++, rb--;
+//                }
+//            }
+//        }
+//
+//        cout << res << endl;
+//    }
+//
+//    return 0;
+//}
+
+
+
+    @Test
+    public void test() {
+        int[] a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] b = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        System.out.println(Arrays.toString(new long[]{multiply(a, b)}));
+    }
+
+//    n位大数相乘 分治法
+    public long multiply(int[] a, int[] b) {
+        int n = a.length;
+        if (n == 1)
+            return a[0] * b[0];
+        int[] a1 = Arrays.copyOfRange(a, 0, n / 2);
+        int[] a2 = Arrays.copyOfRange(a, n / 2, n);
+        int[] b1 = Arrays.copyOfRange(b, 0, n / 2);
+        int[] b2 = Arrays.copyOfRange(b, n / 2, n);
+        long c1 = multiply(a1, b1);
+        long c2 = multiply(a2, b2);
+        long c3 = multiply(add(a1, a2), add(b1, b2));
+        return (long) (c1 * pow(10, n) + (c3 - c1 - c2) * pow(10, n / 2) + c2);
+    }
+    public int[] add(int[] a, int[] b) {
+        int n = a.length;
+        int[] c = new int[n + 1];
+        int carry = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            int temp = a[i] + b[i] + carry;
+            c[i + 1] = temp % 10;
+            carry = temp / 10;
+        }
+        c[0] = carry;
+        return c;
+    }
+
+
+
+
+    @Test
+    public void MaxsSubSumTest() {
+        int[] a = {4, -3, 5, -2, -1, 2, 6, -2};
+        System.out.println(MaxSubSum(a, 0, a.length - 1));
+    }
+//    分治法求最大子序列
+    public int MaxSubSum(int[] a, int left, int right) {
+        if (left == right) {
+            if (a[left] > 0)
+                return a[left];
+            else
+                return 0;
+        }
+        int center = (left + right) / 2;
+        int maxLeftSum = MaxSubSum(a, left, center);
+        int maxRightSum = MaxSubSum(a, center + 1, right);
+
+        int maxLeftBorderSum = 0, leftBorderSum = 0;
+        for (int i = center; i >= left; i--) {
+            leftBorderSum += a[i];
+            if (leftBorderSum > maxLeftBorderSum)
+                maxLeftBorderSum = leftBorderSum;
+        }
+
+        int maxRightBorderSum = 0, rightBorderSum = 0;
+        for (int i = center + 1; i <= right; i++) {
+            rightBorderSum += a[i];
+            if (rightBorderSum > maxRightBorderSum)
+                maxRightBorderSum = rightBorderSum;
+        }
+        return max(max(maxLeftSum, maxRightSum), maxLeftBorderSum + maxRightBorderSum);
+    }
+
+// n皇后问题
     @Test
     public void nQueen() {
         FnQueen nq = new FnQueen();
@@ -136,6 +249,7 @@ public class Main {
                     '}';
         }
     }
+
 
     @Test
     public void Bag01ForceTest() {
